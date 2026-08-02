@@ -109,7 +109,7 @@
     },
     {
       "path": "registry/ikui/data-table-cell-badge.tsx",
-      "content": "export function DataTableCellBadge({\n  value,\n  color,\n}: {\n  value: string | number\n  color?: string\n}) {\n  return (\n    <span\n      className=\"rounded-sm border px-1.5 py-0.5 font-mono text-xs\"\n      style={\n        color\n          ? {\n              color,\n              backgroundColor: `${color}1a`,\n              borderColor: `${color}33`,\n            }\n          : undefined\n      }\n    >\n      {value}\n    </span>\n  )\n}\n",
+      "content": "import { Badge } from '@/components/ui/badge'\n\nexport function DataTableCellBadge({\n  value,\n  color,\n}: {\n  value: string | number\n  color?: string\n}) {\n  return (\n    <Badge\n      variant=\"outline\"\n      className=\"rounded-sm font-mono font-normal\"\n      style={\n        color\n          ? {\n              color,\n              backgroundColor: `${color}1a`,\n              borderColor: `${color}33`,\n            }\n          : undefined\n      }\n    >\n      {value}\n    </Badge>\n  )\n}\n",
       "type": "registry:component"
     },
     {
@@ -154,7 +154,7 @@
     },
     {
       "path": "registry/ikui/data-table-cell-status-code.tsx",
-      "content": "import { getStatusColor } from '@/lib/data-table-cell-utils'\n\nexport function DataTableCellStatusCode({\n  value,\n  color,\n}: {\n  value: number\n  color?: string\n}) {\n  const colors = getStatusColor(value)\n  return (\n    <span\n      className={`font-mono ${color ? '' : colors.text}`}\n      style={color ? { color } : undefined}\n    >\n      {value}\n    </span>\n  )\n}\n",
+      "content": "import { Badge } from '@/components/ui/badge'\nimport { getStatusColor } from '@/lib/data-table-cell-utils'\nimport { cn } from '@/lib/utils'\n\nexport function DataTableCellStatusCode({\n  value,\n  color,\n}: {\n  value: number\n  color?: string\n}) {\n  const colors = getStatusColor(value)\n  return (\n    <Badge\n      variant=\"outline\"\n      className={cn(\n        'rounded-sm font-mono font-normal',\n        !color && cn(colors.text, colors.bg, colors.border),\n      )}\n      style={\n        color\n          ? {\n              color,\n              backgroundColor: `${color}1a`,\n              borderColor: `${color}33`,\n            }\n          : undefined\n      }\n    >\n      {value}\n    </Badge>\n  )\n}\n",
       "type": "registry:component"
     },
     {
