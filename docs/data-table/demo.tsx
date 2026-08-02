@@ -10,8 +10,13 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { Badge } from '@/components/ui/badge'
 import { DataTable } from '@/registry/ikui/data-table'
+import { DataTableCellBadge } from '@/registry/ikui/data-table-cell-badge'
+import { DataTableCellBar } from '@/registry/ikui/data-table-cell-bar'
+import { DataTableCellGauge } from '@/registry/ikui/data-table-cell-gauge'
+import { DataTableCellStar } from '@/registry/ikui/data-table-cell-star'
+import { DataTableCellText } from '@/registry/ikui/data-table-cell-text'
+import { DataTableCellTimestamp } from '@/registry/ikui/data-table-cell-timestamp'
 import { DataTableColumnHeader } from '@/registry/ikui/data-table-column-header'
 import { DataTableToolbar } from '@/registry/ikui/data-table-toolbar'
 
@@ -21,6 +26,9 @@ interface Task {
   status: 'todo' | 'in-progress' | 'done'
   priority: 'low' | 'medium' | 'high'
   estimatedHours: number
+  progress: number
+  favorite: boolean
+  createdAt: Date
 }
 
 const data: Task[] = [
@@ -30,6 +38,9 @@ const data: Task[] = [
     status: 'in-progress',
     priority: 'high',
     estimatedHours: 8,
+    progress: 60,
+    favorite: true,
+    createdAt: new Date('2026-07-20T09:15:00'),
   },
   {
     id: 'TASK-2',
@@ -37,6 +48,9 @@ const data: Task[] = [
     status: 'todo',
     priority: 'medium',
     estimatedHours: 5,
+    progress: 0,
+    favorite: false,
+    createdAt: new Date('2026-07-22T14:30:00'),
   },
   {
     id: 'TASK-3',
@@ -44,6 +58,9 @@ const data: Task[] = [
     status: 'done',
     priority: 'high',
     estimatedHours: 2,
+    progress: 100,
+    favorite: false,
+    createdAt: new Date('2026-07-18T11:05:00'),
   },
   {
     id: 'TASK-4',
@@ -51,6 +68,9 @@ const data: Task[] = [
     status: 'todo',
     priority: 'low',
     estimatedHours: 4,
+    progress: 10,
+    favorite: true,
+    createdAt: new Date('2026-07-25T16:45:00'),
   },
   {
     id: 'TASK-5',
@@ -58,6 +78,9 @@ const data: Task[] = [
     status: 'in-progress',
     priority: 'medium',
     estimatedHours: 6,
+    progress: 45,
+    favorite: false,
+    createdAt: new Date('2026-07-19T08:20:00'),
   },
   {
     id: 'TASK-6',
@@ -65,6 +88,9 @@ const data: Task[] = [
     status: 'todo',
     priority: 'high',
     estimatedHours: 3,
+    progress: 0,
+    favorite: true,
+    createdAt: new Date('2026-07-28T13:10:00'),
   },
   {
     id: 'TASK-7',
@@ -72,6 +98,9 @@ const data: Task[] = [
     status: 'done',
     priority: 'low',
     estimatedHours: 7,
+    progress: 100,
+    favorite: false,
+    createdAt: new Date('2026-07-15T10:00:00'),
   },
   {
     id: 'TASK-8',
@@ -79,13 +108,16 @@ const data: Task[] = [
     status: 'in-progress',
     priority: 'medium',
     estimatedHours: 5,
+    progress: 75,
+    favorite: true,
+    createdAt: new Date('2026-07-30T17:55:00'),
   },
 ]
 
-const statusVariants: Record<Task['status'], string> = {
-  todo: 'secondary',
-  'in-progress': 'default',
-  done: 'outline',
+const statusColors: Record<Task['status'], string> = {
+  todo: '#64748b',
+  'in-progress': '#3b82f6',
+  done: '#22c55e',
 }
 
 const columns: ColumnDef<Task>[] = [
@@ -94,9 +126,7 @@ const columns: ColumnDef<Task>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Title" />
     ),
-    cell: ({ row }) => (
-      <span className="font-medium">{row.getValue('title')}</span>
-    ),
+    cell: ({ row }) => <DataTableCellText value={row.getValue('title')} />,
     meta: { label: 'Title', variant: 'text', placeholder: 'Filter titles...' },
     enableColumnFilter: true,
     filterFn: 'includesString',
@@ -108,9 +138,7 @@ const columns: ColumnDef<Task>[] = [
     ),
     cell: ({ row }) => {
       const status = row.getValue('status') as Task['status']
-      return (
-        <Badge variant={statusVariants[status] as 'default'}>{status}</Badge>
-      )
+      return <DataTableCellBadge value={status} color={statusColors[status]} />
     },
     meta: {
       label: 'Status',
@@ -149,13 +177,56 @@ const columns: ColumnDef<Task>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Est. hours" />
     ),
-    cell: ({ row }) => `${row.getValue('estimatedHours')}h`,
+    cell: ({ row }) => (
+      <DataTableCellBar
+        value={row.getValue('estimatedHours')}
+        min={0}
+        max={12}
+        unit="h"
+      />
+    ),
     meta: { label: 'Est. hours', variant: 'range', range: [0, 12], unit: 'h' },
     enableColumnFilter: true,
     filterFn: (row, id, value: [number, number]) => {
       const v = row.getValue<number>(id)
       return v >= value[0] && v <= value[1]
     },
+  },
+  {
+    accessorKey: 'progress',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Progress" />
+    ),
+    cell: ({ row }) => (
+      <DataTableCellGauge
+        value={row.getValue('progress')}
+        min={0}
+        max={100}
+        unit="%"
+      />
+    ),
+    meta: { label: 'Progress', variant: 'range', range: [0, 100], unit: '%' },
+    enableColumnFilter: true,
+    filterFn: (row, id, value: [number, number]) => {
+      const v = row.getValue<number>(id)
+      return v >= value[0] && v <= value[1]
+    },
+  },
+  {
+    accessorKey: 'favorite',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Favorite" />
+    ),
+    cell: ({ row }) => <DataTableCellStar value={row.getValue('favorite')} />,
+  },
+  {
+    accessorKey: 'createdAt',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Created" />
+    ),
+    cell: ({ row }) => (
+      <DataTableCellTimestamp date={row.getValue('createdAt')} />
+    ),
   },
 ]
 
