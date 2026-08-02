@@ -24,6 +24,45 @@
       "@/components/cascader": ["./registry/ikui/cascader.tsx"],
       "@/components/chart": ["./registry/ikui/chart.tsx"],
       "@/components/copy-button": ["./registry/ikui/copy-button.tsx"],
+      "@/components/data-table-cell-badge": [
+        "./registry/ikui/data-table-cell-badge.tsx"
+      ],
+      "@/components/data-table-cell-bar": [
+        "./registry/ikui/data-table-cell-bar.tsx"
+      ],
+      "@/components/data-table-cell-boolean": [
+        "./registry/ikui/data-table-cell-boolean.tsx"
+      ],
+      "@/components/data-table-cell-code": [
+        "./registry/ikui/data-table-cell-code.tsx"
+      ],
+      "@/components/data-table-cell-gauge": [
+        "./registry/ikui/data-table-cell-gauge.tsx"
+      ],
+      "@/components/data-table-cell-heatmap": [
+        "./registry/ikui/data-table-cell-heatmap.tsx"
+      ],
+      "@/components/data-table-cell-level-indicator": [
+        "./registry/ikui/data-table-cell-level-indicator.tsx"
+      ],
+      "@/components/data-table-cell-number": [
+        "./registry/ikui/data-table-cell-number.tsx"
+      ],
+      "@/components/data-table-cell-star": [
+        "./registry/ikui/data-table-cell-star.tsx"
+      ],
+      "@/components/data-table-cell-status-code": [
+        "./registry/ikui/data-table-cell-status-code.tsx"
+      ],
+      "@/components/data-table-cell-text": [
+        "./registry/ikui/data-table-cell-text.tsx"
+      ],
+      "@/components/data-table-cell-timestamp": [
+        "./registry/ikui/data-table-cell-timestamp.tsx"
+      ],
+      "@/lib/data-table-cell-utils": [
+        "./registry/ikui/data-table-cell-utils.ts"
+      ],
       "@/components/data-table-column-header": [
         "./registry/ikui/data-table-column-header.tsx"
       ],
@@ -60,6 +99,9 @@
         "./registry/ikui/date-range-picker.tsx"
       ],
       "@/components/heatmap-calendar": ["./registry/ikui/heatmap-calendar.tsx"],
+      "@/components/hover-card-timestamp": [
+        "./registry/ikui/hover-card-timestamp.tsx"
+      ],
       "@/components/image-compare": ["./registry/ikui/image-compare.tsx"],
       "@/components/image-crop": ["./registry/ikui/image-crop.tsx"],
       "@/components/image-grid": ["./registry/ikui/image-grid.tsx"],
@@ -71,6 +113,9 @@
         "./registry/ikui/segmented-timeline-strip.tsx"
       ],
       "@/components/spark-chart": ["./registry/ikui/spark-chart.tsx"],
+      "@/components/text-with-tooltip": [
+        "./registry/ikui/text-with-tooltip.tsx"
+      ],
       "@/components/thumbnail-strip": ["./registry/ikui/thumbnail-strip.tsx"],
       "@/components/timeline-element": ["./registry/ikui/timeline-element.tsx"],
       "@/components/timeline-playhead": [

@@ -570,6 +570,66 @@
         {
           "path": "registry/ikui/data-table-utils.ts",
           "type": "registry:lib"
+        },
+        {
+          "path": "registry/ikui/data-table-cell-utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/ikui/text-with-tooltip.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/ikui/hover-card-timestamp.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/ikui/data-table-cell-badge.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/ikui/data-table-cell-bar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/ikui/data-table-cell-boolean.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/ikui/data-table-cell-code.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/ikui/data-table-cell-gauge.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/ikui/data-table-cell-heatmap.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/ikui/data-table-cell-level-indicator.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/ikui/data-table-cell-number.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/ikui/data-table-cell-star.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/ikui/data-table-cell-status-code.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/ikui/data-table-cell-text.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "registry/ikui/data-table-cell-timestamp.tsx",
+          "type": "registry:component"
         }
       ],
       "dependencies": [
@@ -579,6 +639,7 @@
         "@dnd-kit/modifiers",
         "@dnd-kit/sortable",
         "@dnd-kit/utilities",
+        "date-fns",
         "lucide-react"
       ],
       "registryDependencies": [
@@ -595,7 +656,9 @@
         "label",
         "slider",
         "calendar",
-        "skeleton"
+        "skeleton",
+        "tooltip",
+        "hover-card"
       ],
       "category": "display"
     },

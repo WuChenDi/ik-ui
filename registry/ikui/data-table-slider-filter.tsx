@@ -134,7 +134,6 @@ export function DataTableSliderFilter<TData>({
   return (
     <Popover>
       <PopoverTrigger
-        nativeButton={false}
         render={
           <Button variant="outline" size="sm" className="border-dashed">
             {columnFilterValue ? (

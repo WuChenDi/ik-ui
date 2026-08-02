@@ -226,12 +226,12 @@ export function DataTable<TData>({
   }
 
   const tableContent = (
-    <div className="flex flex-1 flex-col space-y-4">
+    <div className="flex min-h-0 flex-1 flex-col space-y-4">
       {children}
       <div
         ref={scrollContainerRef}
         data-slot="table-container"
-        className="relative flex-1 overflow-auto rounded-lg border"
+        className="relative min-h-0 flex-1 overflow-auto rounded-lg border"
       >
         <table
           data-slot="table"

@@ -1,4 +1,9 @@
 import { Demo } from './demo'
+import { Demo as VirtualizedDemo } from './demo-virtualized'
+import { Demo as SelectionDemo } from './demo-selection'
+import { Demo as ReorderDemo } from './demo-reorder'
+import { Demo as PinningDemo } from './demo-pinning'
+import { Demo as SkeletonDemo } from './demo-skeleton'
 
 <DemoCanvas>
   <DemoPreview>
@@ -89,6 +94,94 @@ function Example() {
   );
 }
 ```
+
+## Examples
+
+### Large datasets (virtualized)
+
+Row virtualization only kicks in when the **final row model** holds more than 20
+rows, so it and pagination are mutually exclusive: drop `getPaginationRowModel`
+(or set `showPagination={false}`) to let the full dataset reach the table, and
+give the container a **bounded height** so it becomes the scroll element the
+virtualizer measures against. The example below renders 5,000 rows while only
+mounting the handful in view.
+
+Virtualization trims the **DOM**, not memory or compute — sorting and filtering
+still run over every row on the client. Past tens of thousands of rows, move to
+server-side pagination or infinite loading instead.
+
+<DemoCanvas>
+  <DemoPreview>
+    <VirtualizedDemo />
+  </DemoPreview>
+  <DemoCode>
+    ```tsx file=./demo-virtualized.tsx
+    ```
+  </DemoCode>
+</DemoCanvas>
+
+### Row selection
+
+Add a `select` column that renders a `Checkbox` bound to the row's selection
+state, and a header checkbox for select-all. Pass an `actionBar` to `DataTable`
+— it renders below the footer whenever rows are selected.
+
+<DemoCanvas>
+  <DemoPreview>
+    <SelectionDemo />
+  </DemoPreview>
+  <DemoCode>
+    ```tsx file=./demo-selection.tsx
+    ```
+  </DemoCode>
+</DemoCanvas>
+
+### Drag to reorder
+
+Set `enableDragAndDrop`, give the table a stable `getRowId`, and add a column
+with id `"drag"` rendering `DataTableDragHandle`. Reorder your own data in
+`onDragEnd` with dnd-kit's `arrayMove`.
+
+<DemoCanvas>
+  <DemoPreview>
+    <ReorderDemo />
+  </DemoPreview>
+  <DemoCode>
+    ```tsx file=./demo-reorder.tsx
+    ```
+  </DemoCode>
+</DemoCanvas>
+
+### Column pinning
+
+Pin columns with `initialState.columnPinning`. Pinned columns stay put with an
+inset shadow while the rest of a wide table scrolls horizontally.
+
+<DemoCanvas>
+  <DemoPreview>
+    <PinningDemo />
+  </DemoPreview>
+  <DemoCode>
+    ```tsx file=./demo-pinning.tsx
+    ```
+  </DemoCode>
+</DemoCanvas>
+
+### Loading skeleton
+
+Render `DataTableSkeleton` while data is loading. Match `columnCount` to your
+columns; `rowCount`, `filterCount`, and the pagination/view toggles are
+configurable.
+
+<DemoCanvas>
+  <DemoPreview>
+    <SkeletonDemo />
+  </DemoPreview>
+  <DemoCode>
+    ```tsx file=./demo-skeleton.tsx
+    ```
+  </DemoCode>
+</DemoCanvas>
 
 ## Column meta
 
