@@ -1,3 +1,5 @@
+import { Badge } from '@/components/ui/badge'
+
 export function DataTableCellBadge({
   value,
   color,
@@ -6,8 +8,9 @@ export function DataTableCellBadge({
   color?: string
 }) {
   return (
-    <span
-      className="rounded-sm border px-1.5 py-0.5 font-mono text-xs"
+    <Badge
+      variant="outline"
+      className="rounded-sm font-mono font-normal"
       style={
         color
           ? {
@@ -19,6 +22,6 @@ export function DataTableCellBadge({
       }
     >
       {value}
-    </span>
+    </Badge>
   )
 }

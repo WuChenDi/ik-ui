@@ -1,4 +1,6 @@
+import { Badge } from '@/components/ui/badge'
 import { getStatusColor } from '@/lib/data-table-cell-utils'
+import { cn } from '@/lib/utils'
 
 export function DataTableCellStatusCode({
   value,
@@ -9,11 +11,23 @@ export function DataTableCellStatusCode({
 }) {
   const colors = getStatusColor(value)
   return (
-    <span
-      className={`font-mono ${color ? '' : colors.text}`}
-      style={color ? { color } : undefined}
+    <Badge
+      variant="outline"
+      className={cn(
+        'rounded-sm font-mono font-normal',
+        !color && cn(colors.text, colors.bg, colors.border),
+      )}
+      style={
+        color
+          ? {
+              color,
+              backgroundColor: `${color}1a`,
+              borderColor: `${color}33`,
+            }
+          : undefined
+      }
     >
       {value}
-    </span>
+    </Badge>
   )
 }
