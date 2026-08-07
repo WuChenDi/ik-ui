@@ -2,7 +2,7 @@ import { GoogleAnalytics } from '@next/third-parties/google'
 import type { Metadata, Viewport } from 'next'
 import { DynaPuff, Geist, Geist_Mono, Instrument_Serif } from 'next/font/google'
 import { siteConfig } from '@/lib/config'
-import { constructMetadata } from '@/lib/utils'
+import { cn, constructMetadata } from '@/lib/utils'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
 
@@ -104,7 +104,13 @@ export default async function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${instrumentSerif.variable} ${dynaPuff.variable} min-h-dvh bg-background text-foreground antialiased font-sans`}
+        className={cn(
+          geistSans.variable,
+          geistMono.variable,
+          instrumentSerif.variable,
+          dynaPuff.variable,
+          'min-h-dvh bg-background text-foreground antialiased font-sans',
+        )}
         suppressHydrationWarning
       >
         <ThemeProvider

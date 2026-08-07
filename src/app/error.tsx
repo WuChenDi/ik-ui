@@ -1,30 +1,35 @@
 'use client'
 
-import { ArrowLeft, Home } from 'lucide-react'
+import { Home } from 'lucide-react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 
-export default function NotFound() {
-  const router = useRouter()
+interface ErrorProps {
+  error: Error & { digest?: string }
+  reset: () => void
+}
+
+export default function Error({ error, reset }: ErrorProps) {
+  useEffect(() => {
+    console.error(error)
+  }, [error])
 
   return (
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center text-center">
       <span className="text-[9rem] leading-none font-extrabold text-foreground/10 select-none tracking-tighter">
-        404
+        500
       </span>
       <div className="-mt-10 flex flex-col items-center gap-3">
-        <h1 className="text-xl font-medium">Page Not Found</h1>
+        <h1 className="text-xl font-medium">Something Went Wrong</h1>
         <p className="max-w-sm text-sm text-muted-foreground leading-relaxed">
-          The page you're looking for may have been removed, moved, or never
-          existed.
+          An unexpected error occurred. You can try again or return to the home
+          page.
         </p>
         <div className="mt-8 flex justify-center gap-2">
-          <Button variant="outline" onClick={() => router.back()}>
-            <ArrowLeft />
-            Go Back
-          </Button>
+          <Button onClick={reset}>Try again</Button>
           <Button
+            variant="outline"
             render={
               <Link href="/">
                 <Home />
