@@ -1,17 +1,15 @@
 'use client'
 
 import type { ColumnDef } from '@tanstack/react-table'
-import {
-  getCoreRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
+import { useTable } from '@tanstack/react-table'
 import { DataTable } from '@/registry/ikui/data-table'
 import { DataTableCellBadge } from '@/registry/ikui/data-table-cell-badge'
 import { DataTableCellBar } from '@/registry/ikui/data-table-cell-bar'
 import { DataTableCellNumber } from '@/registry/ikui/data-table-cell-number'
 import { DataTableCellText } from '@/registry/ikui/data-table-cell-text'
 import { DataTableColumnHeader } from '@/registry/ikui/data-table-column-header'
+import type { DataTableFeatures } from '@/registry/ikui/data-table-utils'
+import { dataTableFeatures } from '@/registry/ikui/data-table-utils'
 
 interface Service {
   id: string
@@ -41,7 +39,7 @@ const data: Service[] = Array.from({ length: 5000 }, (_, i) => ({
   latency: 20 + ((i * 37) % 480),
 }))
 
-const columns: ColumnDef<Service>[] = [
+const columns: ColumnDef<DataTableFeatures, Service>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => (
@@ -92,11 +90,10 @@ const columns: ColumnDef<Service>[] = [
 ]
 
 export function Demo() {
-  const table = useReactTable({
+  const table = useTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
+    features: dataTableFeatures,
   })
 
   return (

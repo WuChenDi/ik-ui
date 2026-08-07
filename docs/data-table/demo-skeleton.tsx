@@ -2,15 +2,17 @@
 
 import type { ColumnDef } from '@tanstack/react-table'
 import {
-  getCoreRowModel,
-  getPaginationRowModel,
-  useReactTable,
+  createPaginatedRowModel,
+  tableFeatures,
+  useTable,
 } from '@tanstack/react-table'
 import { RefreshCw } from 'lucide-react'
 import * as React from 'react'
 import { Button } from '@/components/ui/button'
 import { DataTable } from '@/registry/ikui/data-table'
 import { DataTableSkeleton } from '@/registry/ikui/data-table-skeleton'
+import type { DataTableFeatures } from '@/registry/ikui/data-table-utils'
+import { dataTableFeatures } from '@/registry/ikui/data-table-utils'
 
 interface Invoice {
   id: string
@@ -26,7 +28,7 @@ const data: Invoice[] = [
   { id: 'INV-004', customer: 'Umbrella', amount: '$120', status: 'Overdue' },
 ]
 
-const columns: ColumnDef<Invoice>[] = [
+const columns: ColumnDef<DataTableFeatures, Invoice>[] = [
   { accessorKey: 'id', header: 'Invoice' },
   { accessorKey: 'customer', header: 'Customer' },
   { accessorKey: 'amount', header: 'Amount' },
@@ -36,11 +38,13 @@ const columns: ColumnDef<Invoice>[] = [
 export function Demo() {
   const [isLoading, setIsLoading] = React.useState(true)
 
-  const table = useReactTable({
+  const table = useTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    features: tableFeatures({
+      ...dataTableFeatures,
+      paginatedRowModel: createPaginatedRowModel(),
+    }),
   })
 
   return (

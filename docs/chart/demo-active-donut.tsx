@@ -83,8 +83,9 @@ export function Demo() {
               }
             />
             <ChartLegend
-              content={<ChartLegendContent nameKey="plan" />}
-              className="-translate-y-2"
+              content={
+                <ChartLegendContent nameKey="plan" className="-translate-y-2" />
+              }
             />
             <Pie
               data={chartData}

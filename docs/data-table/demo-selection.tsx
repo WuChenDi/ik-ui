@@ -2,15 +2,17 @@
 
 import type { ColumnDef } from '@tanstack/react-table'
 import {
-  getCoreRowModel,
-  getPaginationRowModel,
-  useReactTable,
+  createPaginatedRowModel,
+  tableFeatures,
+  useTable,
 } from '@tanstack/react-table'
 import { Trash2, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { DataTable } from '@/registry/ikui/data-table'
 import { DataTableCellText } from '@/registry/ikui/data-table-cell-text'
+import type { DataTableFeatures } from '@/registry/ikui/data-table-utils'
+import { dataTableFeatures } from '@/registry/ikui/data-table-utils'
 
 interface Member {
   id: string
@@ -37,7 +39,7 @@ const data: Member[] = [
   },
 ]
 
-const columns: ColumnDef<Member>[] = [
+const columns: ColumnDef<DataTableFeatures, Member>[] = [
   {
     id: 'select',
     header: ({ table }) => (
@@ -76,11 +78,13 @@ const columns: ColumnDef<Member>[] = [
 ]
 
 export function Demo() {
-  const table = useReactTable({
+  const table = useTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    features: tableFeatures({
+      ...dataTableFeatures,
+      paginatedRowModel: createPaginatedRowModel(),
+    }),
   })
 
   const selectedCount = table.getFilteredSelectedRowModel().rows.length

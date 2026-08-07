@@ -41,15 +41,14 @@ Declare filters through `columnDef.meta`, then hand the table to `DataTable` wit
 
 ```tsx
 import {
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
+  createPaginatedRowModel,
+  tableFeatures,
+  useTable,
 } from "@tanstack/react-table";
 import { DataTable } from "@/components/data-table";
 import { DataTableToolbar } from "@/components/data-table-toolbar";
 import { DataTableColumnHeader } from "@/components/data-table-column-header";
+import { dataTableFeatures } from "@/lib/data-table-utils";
 
 const columns = [
   {
@@ -78,13 +77,13 @@ const columns = [
 ];
 
 function Example() {
-  const table = useReactTable({
+  const table = useTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
+    features: tableFeatures({
+      ...dataTableFeatures,
+      paginatedRowModel: createPaginatedRowModel(),
+    }),
   });
 
   return (
@@ -100,7 +99,7 @@ function Example() {
 ### Large datasets (virtualized)
 
 Row virtualization only kicks in when the **final row model** holds more than 20
-rows, so it and pagination are mutually exclusive: drop `getPaginationRowModel`
+rows, so it and pagination are mutually exclusive: omit `paginatedRowModel`
 (or set `showPagination={false}`) to let the full dataset reach the table, and
 give the container a **bounded height** so it becomes the scroll element the
 virtualizer measures against. The example below renders 5,000 rows while only
