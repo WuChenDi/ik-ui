@@ -1,21 +1,22 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import type { Row } from '@tanstack/react-table'
+import type { Row, RowData } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
 import type { VirtualItem, Virtualizer } from '@tanstack/react-virtual'
 import { TableCell, TableRow } from '@/components/ui/table'
+import type { DataTableFeatures } from '@/lib/data-table-utils'
 import { getCommonPinningStyles } from '@/lib/data-table-utils'
 import { cn } from '@/lib/utils'
 
-interface DraggableRowProps<TData> {
-  row: Row<TData>
+interface DraggableRowProps<TData extends RowData> {
+  row: Row<DataTableFeatures, TData>
   rowId: string
   isEditing?: boolean
   virtualRow?: VirtualItem
   rowVirtualizer?: Virtualizer<HTMLDivElement, Element>
 }
 
-export function DataTableDraggableRow<TData>({
+export function DataTableDraggableRow<TData extends RowData>({
   row,
   rowId,
   isEditing,

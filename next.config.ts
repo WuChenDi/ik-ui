@@ -5,6 +5,9 @@ import { generateLlmMarkdownFiles } from './src/lib/llm'
 
 const nextConfig: NextConfig = {
   trailingSlash: false,
+  experimental: {
+    useTypeScriptCli: true,
+  },
   images: {
     remotePatterns: [
       {

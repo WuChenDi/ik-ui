@@ -12,7 +12,7 @@ import {
 } from '@dnd-kit/core'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import type { Table as TanstackTable } from '@tanstack/react-table'
+import type { ReactTable, RowData } from '@tanstack/react-table'
 import { flexRender } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import * as React from 'react'
@@ -26,12 +26,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import type { DataTableFeatures } from '@/lib/data-table-utils'
 import { getCommonPinningStyles } from '@/lib/data-table-utils'
 import { cn } from '@/lib/utils'
 
-interface DataTableProps<TData>
+interface DataTableProps<TData extends RowData>
   extends Omit<React.ComponentProps<'div'>, 'onDragEnd'> {
-  table: TanstackTable<TData>
+  table: ReactTable<DataTableFeatures, TData>
   actionBar?: React.ReactNode
   editingRowId?: number | null
   getRowId?: (row: TData) => number | string
@@ -46,7 +47,7 @@ interface DataTableProps<TData>
   emptyState?: React.ReactNode
 }
 
-export function DataTable<TData>({
+export function DataTable<TData extends RowData>({
   table,
   actionBar,
   editingRowId,

@@ -1,6 +1,6 @@
 'use client'
 
-import type { Column } from '@tanstack/react-table'
+import type { Column, RowData } from '@tanstack/react-table'
 import { PlusCircle, XCircle } from 'lucide-react'
 import * as React from 'react'
 import { Button } from '@/components/ui/button'
@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/popover'
 import { Separator } from '@/components/ui/separator'
 import { Slider } from '@/components/ui/slider'
+import type { DataTableFeatures } from '@/lib/data-table-utils'
 
 interface Range {
   min: number
@@ -35,12 +36,12 @@ function getIsValidRange(value: unknown): value is RangeValue {
   )
 }
 
-interface DataTableSliderFilterProps<TData> {
-  column: Column<TData, unknown>
+interface DataTableSliderFilterProps<TData extends RowData> {
+  column: Column<DataTableFeatures, TData, unknown>
   title?: string
 }
 
-export function DataTableSliderFilter<TData>({
+export function DataTableSliderFilter<TData extends RowData>({
   column,
   title,
 }: DataTableSliderFilterProps<TData>) {

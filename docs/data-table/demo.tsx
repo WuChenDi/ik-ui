@@ -2,13 +2,9 @@
 
 import type { ColumnDef } from '@tanstack/react-table'
 import {
-  getCoreRowModel,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
+  createPaginatedRowModel,
+  tableFeatures,
+  useTable,
 } from '@tanstack/react-table'
 import { DataTable } from '@/registry/ikui/data-table'
 import { DataTableCellBadge } from '@/registry/ikui/data-table-cell-badge'
@@ -19,6 +15,8 @@ import { DataTableCellText } from '@/registry/ikui/data-table-cell-text'
 import { DataTableCellTimestamp } from '@/registry/ikui/data-table-cell-timestamp'
 import { DataTableColumnHeader } from '@/registry/ikui/data-table-column-header'
 import { DataTableToolbar } from '@/registry/ikui/data-table-toolbar'
+import type { DataTableFeatures } from '@/registry/ikui/data-table-utils'
+import { dataTableFeatures } from '@/registry/ikui/data-table-utils'
 
 interface Task {
   id: string
@@ -120,7 +118,7 @@ const statusColors: Record<Task['status'], string> = {
   done: '#22c55e',
 }
 
-const columns: ColumnDef<Task>[] = [
+const columns: ColumnDef<DataTableFeatures, Task>[] = [
   {
     accessorKey: 'title',
     header: ({ column }) => (
@@ -231,16 +229,14 @@ const columns: ColumnDef<Task>[] = [
 ]
 
 export function Demo() {
-  const table = useReactTable({
+  const table = useTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
-    initialState: { pagination: { pageSize: 5 } },
+    features: tableFeatures({
+      ...dataTableFeatures,
+      paginatedRowModel: createPaginatedRowModel(),
+    }),
+    initialState: { pagination: { pageIndex: 0, pageSize: 5 } },
   })
 
   return (

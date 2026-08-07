@@ -1,11 +1,13 @@
 'use client'
 
 import type { ColumnDef } from '@tanstack/react-table'
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
+import { useTable } from '@tanstack/react-table'
 import { MoreHorizontal } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { DataTable } from '@/registry/ikui/data-table'
 import { DataTableCellText } from '@/registry/ikui/data-table-cell-text'
+import type { DataTableFeatures } from '@/registry/ikui/data-table-utils'
+import { dataTableFeatures } from '@/registry/ikui/data-table-utils'
 
 interface Employee {
   id: string
@@ -56,7 +58,7 @@ const data: Employee[] = [
   },
 ]
 
-const columns: ColumnDef<Employee>[] = [
+const columns: ColumnDef<DataTableFeatures, Employee>[] = [
   { accessorKey: 'id', header: 'ID', size: 90 },
   {
     accessorKey: 'name',
@@ -90,12 +92,12 @@ const columns: ColumnDef<Employee>[] = [
 ]
 
 export function Demo() {
-  const table = useReactTable({
+  const table = useTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
+    features: dataTableFeatures,
     initialState: {
-      columnPinning: { left: ['id'], right: ['actions'] },
+      columnPinning: { start: ['id'], end: ['actions'] },
     },
   })
 

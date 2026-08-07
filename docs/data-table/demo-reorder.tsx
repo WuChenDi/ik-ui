@@ -3,11 +3,13 @@
 import type { DragEndEvent } from '@dnd-kit/core'
 import { arrayMove } from '@dnd-kit/sortable'
 import type { ColumnDef } from '@tanstack/react-table'
-import { getCoreRowModel, useReactTable } from '@tanstack/react-table'
+import { useTable } from '@tanstack/react-table'
 import * as React from 'react'
 import { DataTable } from '@/registry/ikui/data-table'
 import { DataTableCellBadge } from '@/registry/ikui/data-table-cell-badge'
 import { DataTableDragHandle } from '@/registry/ikui/data-table-drag-handle'
+import type { DataTableFeatures } from '@/registry/ikui/data-table-utils'
+import { dataTableFeatures } from '@/registry/ikui/data-table-utils'
 
 interface Track {
   id: string
@@ -30,7 +32,7 @@ const statusColors: Record<string, string> = {
   review: '#f59e0b',
 }
 
-const columns: ColumnDef<Track>[] = [
+const columns: ColumnDef<DataTableFeatures, Track>[] = [
   {
     id: 'drag',
     header: () => null,
@@ -58,10 +60,10 @@ const columns: ColumnDef<Track>[] = [
 export function Demo() {
   const [data, setData] = React.useState(initialData)
 
-  const table = useReactTable({
+  const table = useTable({
     data,
     columns,
-    getCoreRowModel: getCoreRowModel(),
+    features: dataTableFeatures,
     getRowId: (row) => row.id,
   })
 
