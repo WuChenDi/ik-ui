@@ -373,13 +373,20 @@ const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
             role="group"
             aria-label={`Level ${columnIndex + 1}`}
             className={cn(
-              'max-h-[300px] min-w-[130px] shrink-0 overflow-auto p-1',
+              'max-h-[300px] min-w-[130px] shrink-0 overflow-auto p-1 space-y-0.5',
               columnIndex !== columns.length - 1 && 'border-r border-border',
             )}
           >
             {column.map((option, itemIndex) => {
               const isExpanded = expandedPath[columnIndex] === option.value
-              const isSelected = selectedValue[columnIndex] === option.value
+              // The whole parent path has to match: options under different
+              // parents may share the same value, so comparing only the value at
+              // this level would mark a sibling branch's child as selected.
+              const isSelected =
+                selectedValue[columnIndex] === option.value &&
+                expandedPath
+                  .slice(0, columnIndex)
+                  .every((val, index) => val === selectedValue[index])
               const hasChildren = option.children && option.children.length > 0
               const isFocused =
                 focusedColumn === columnIndex && focusedIndex === itemIndex
@@ -413,8 +420,14 @@ const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
                     handleKeyDown(e, option, columnIndex, itemIndex, columns)
                   }
                   onMouseEnter={() => {
-                    if (expandTrigger === 'hover' && hasChildren) {
+                    if (expandTrigger !== 'hover') return
+                    if (hasChildren) {
                       handleExpand(option, columnIndex)
+                    } else if (expandedPath.length > columnIndex) {
+                      // Leaf option: collapse the columns left over from the
+                      // previously hovered parent, otherwise they keep hanging
+                      // to the right as if this option had children.
+                      setExpandedPath(expandedPath.slice(0, columnIndex))
                     }
                   }}
                   onFocus={() => {
@@ -449,7 +462,12 @@ const Cascader = React.forwardRef<HTMLDivElement, CascaderProps>(
             : selectedValue,
         )
         setFocusedColumn(0)
-        setFocusedIndex(0)
+        // Start keyboard navigation on the selected root option instead of the
+        // first one, so arrow keys continue from the current selection.
+        const selectedRootIndex = options.findIndex(
+          (option) => option.value === selectedValue[0],
+        )
+        setFocusedIndex(selectedRootIndex >= 0 ? selectedRootIndex : 0)
       } else {
         setExpandedPath([])
       }
