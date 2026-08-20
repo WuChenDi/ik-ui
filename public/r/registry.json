@@ -305,6 +305,7 @@
         "@ikui/timeline-element",
         "@ikui/timeline-playhead",
         "@ikui/thumbnail-strip",
+        "@ikui/video-thumbnail-cache",
         "button",
         "card",
         "slider",
@@ -313,6 +314,37 @@
       ],
       "category": "blocks",
       "categories": ["video"],
+      "meta": {
+        "iframeHeight": 640
+      }
+    },
+    {
+      "name": "video-audio-extractor",
+      "type": "registry:block",
+      "title": "Video Audio Extractor",
+      "description": "A business composition built from the timeline primitives: pick a range on a video with the timeline-element handles over a thumbnail strip, then export just that window as an audio file. The playhead follows playback, the frames outside the selection dim, and an In / Out / length readout tracks the selection. Export discards the picture and writes the trimmed audio as WAV, M4A or OGG via mediabunny.",
+      "files": [
+        {
+          "path": "registry/ikui/blocks/video-audio-extractor.tsx",
+          "type": "registry:block"
+        }
+      ],
+      "dependencies": ["lucide-react", "mediabunny"],
+      "registryDependencies": [
+        "@ikui/timeline-ruler",
+        "@ikui/timeline-element",
+        "@ikui/timeline-playhead",
+        "@ikui/thumbnail-strip",
+        "@ikui/video-thumbnail-cache",
+        "button",
+        "card",
+        "select",
+        "slider",
+        "scroll-area",
+        "skeleton"
+      ],
+      "category": "blocks",
+      "categories": ["video", "audio"],
       "meta": {
         "iframeHeight": 640
       }

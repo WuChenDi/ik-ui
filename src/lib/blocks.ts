@@ -25,6 +25,7 @@ export type BlockCategory = (typeof blockCategories)[number]['slug']
 const BLOCK_ORDER = [
   'video-frame-extractor',
   'video-trimmer',
+  'video-audio-extractor',
   'storyboard-timeline',
   'image-cropper',
   'image-editor',
