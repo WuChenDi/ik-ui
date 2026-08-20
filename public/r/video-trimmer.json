@@ -12,6 +12,7 @@
     "@ikui/timeline-element",
     "@ikui/timeline-playhead",
     "@ikui/thumbnail-strip",
+    "@ikui/video-thumbnail-cache",
     "button",
     "card",
     "slider",
