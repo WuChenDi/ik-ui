@@ -91,14 +91,14 @@ Browse the full catalog with live previews at
 
 | Category  | Components |
 |-----------|-----------|
-| Display   | Chart · Spark Chart · QR Code · Tree · Heatmap Calendar |
+| Display   | Chart · Spark Chart · QR Code · Tree · Heatmap Calendar · Data Table |
 | Form      | Cascader · Password Input · Date Range Picker |
 | Button    | Copy Button |
-| Image     | Image Compare · Image Crop · Image Grid · Particle Image |
+| Image     | Image Compare · Image Crop · Image Grid · Particle Image · Media Viewer |
 | Audio     | Audio Waveform · Waveform Player |
 | Video     | Video Thumbnail Cache · Thumbnail Strip · Segmented Timeline Strip |
 | Timeline  | Timeline Ruler · Timeline Element · Timeline Playhead |
-| Blocks    | Audio Trimmer · Video Trimmer · Media Compressor · Image Cropper · Image Editor · Storyboard Timeline · Video Frame Extractor |
+| Blocks    | Audio Trimmer · Video Trimmer · Video Audio Extractor · Media Compressor · Image Cropper · Image Editor · Storyboard Timeline · Video Frame Extractor |
 
 ## Tech stack
 
@@ -106,7 +106,7 @@ Browse the full catalog with live previews at
 - **Tailwind CSS v4** (CSS-first, no config file)
 - **Base UI** (`@base-ui/react`) as the only UI primitive layer
 - **MDX** docs with Shiki highlighting
-- **Biome** for lint + format, **TypeScript 6** (strict), **pnpm 11**, **Node ≥ 22**
+- **Biome** for lint + format, **TypeScript 7** (strict), **pnpm 11**, **Node ≥ 22**
 
 ## Documentation
 
@@ -123,12 +123,7 @@ Have questions, comments or feedback? Reach out on [Telegram](https://t.me/wuche
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=WuChenDi/ik-ui&type=Date)](https://www.star-history.com/#WuChenDi/ik-ui&Date)
-
-<!-- ## Credits
-
-ikui is derived from the MIT-licensed [spell-ui](https://github.com/xxtomm/spell-ui)
-project, re-themed onto [Base UI](https://base-ui.com) primitives. -->
+[![Star History Chart](https://api.star-history.com/svg?repos=WuChenDi/ikui&type=Date)](https://www.star-history.com/#WuChenDi/ikui&Date)
 
 ## License
 
