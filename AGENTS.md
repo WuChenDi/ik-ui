@@ -5,32 +5,33 @@ Guidance for AI agents working in this repository.
 ## Project
 
 **ikui** — a copy-paste React component library plus its documentation site.
-Derived from the MIT-licensed [spell-ui](https://github.com/xxtomm/spell-ui),
-re-themed onto [Base UI](https://base-ui.com) primitives. Components are
-distributed through a shadcn-style registry (`registry.json` → `public/r/*.json`),
-not published as an npm package.
+Built on [Base UI](https://base-ui.com) primitives and distributed through a
+shadcn-style registry (`registry.json` → `public/r/*.json`), not published as an
+npm package.
 
 Live site / registry: https://ik-ui.pages.dev
 
 ## Stack
 
-- **Next.js 16** (App Router, RSC, `--webpack`) + **React 19**
+- **Next.js 16** (App Router, RSC) + **React 19**
 - **Tailwind CSS 4** (CSS-first, `src/app/globals.css`; no `tailwind.config`)
 - **Base UI** (`@base-ui/react`) as the only UI primitive layer — **no Radix**
 - **MDX** docs via `@next/mdx` (`remark-code-import`, `remark-gfm`,
   `rehype-slug`, `rehype-autolink-headings`, Shiki highlighting)
 - **Biome** for lint + format (replaces ESLint/Prettier)
-- **TypeScript 6** (strict), **pnpm 11**, **Node >= 22**
+- **TypeScript 7** (strict), **pnpm 11**, **Node >= 22**
 - Animations: `motion`; icons: `lucide-react`
 
 ## Commands
 
 ```bash
 pnpm dev              # next dev (wrapped by `nsl run --name ikui`), http://ikui.localhost:3355
-pnpm build            # next build --webpack
+pnpm build            # next build
 pnpm lint             # biome check .
 pnpm format           # biome format --write .
-pnpm registry:build   # shadcn build → regenerate public/r/*.json from registry.json
+pnpm registry:paths   # regenerate the registry path aliases in tsconfig.json
+pnpm registry:check   # validate registry.json against the files on disk
+pnpm registry:build   # registry:paths + shadcn build → regenerate public/r/*.json
 pnpm clean            # remove node_modules/.next/out/dist
 ```
 
@@ -41,10 +42,12 @@ verify by building and by checking the rendered docs page for the component.
 
 ```
 registry/ikui/        # the actual component source — what users copy/install
+registry/ikui/blocks/ # block source (registry:block) — business compositions
 docs/<name>/          # per-component docs: doc.mdx + demo.tsx (+ demo-*.tsx variants)
 registry.json         # registry manifest (source of truth for sidebar + install)
 public/r/*.json       # generated registry output (do not hand-edit)
-src/app/              # Next.js App Router (docs, og, api/github/stars, sitemap…)
+src/app/              # Next.js App Router (docs, blocks, og, sitemap, robots…)
+src/app/blocks/       # block gallery + /blocks/view/<name> iframe preview routes
 src/components/       # site chrome (header, sidebar, mdx widgets); ui/ = shadcn primitives
 src/lib/              # utils (cn, metadata), registry/doc loaders, config, types
 src/mdx-components.tsx # MDX component map (DemoCanvas, InstallationTabs, PropsTable…)
@@ -60,8 +63,9 @@ Path aliases (`tsconfig.json`): `@/*` → `src/*` and repo root; `@/docs/*` → 
   - `import type { ... }` required for type-only imports (separated style).
   - imports are auto-organized; `import * as z from "zod"` (never `{ z }`).
   - floating/misused promises are errors.
-- `src/components/ui/**` and `registry/ikui/**` are **excluded from Biome** —
-  they follow upstream shadcn/Base UI formatting; match it, don't reformat.
+- Only `src/components/ui/**/*.tsx` is **excluded from Biome** (see `biome.json`) —
+  those follow upstream shadcn/Base UI formatting; match it, don't reformat.
+  `registry/ikui/**` **is** linted and formatted like the rest of the repo.
 - Use `cn()` from `@/lib/utils` for class merging.
 - Registry components should be self-contained and copy-pasteable: minimal deps,
   declare every external dep in the registry item's `dependencies` /
@@ -135,11 +139,13 @@ Do not skip phases or bypass the task files for non-trivial work.
 
 ## Notes / gotchas
 
-- `mobile-nav.tsx` still references `--radix-popover-content-available-*` CSS
-  vars in a className string (cosmetic, non-breaking leftover from migration).
-- `webpack` config adds a `?raw` resourceQuery loader so MDX/source files can be
-  imported as raw strings for the code-preview blocks.
-- `/docs/:slug.md` is rewritten to `/docs/:slug/md` (raw markdown export route).
+- Plain-Markdown docs (`public/docs/<id>.md`, `llms.txt`, `llms-full.txt`) are
+  emitted at **build time** by `src/lib/llm.ts`, called from `next.config.ts` —
+  there is no `.md` route handler. `next-on-pages` forces route handlers onto the
+  Edge runtime, which has no filesystem, so a route could not read the docs at
+  all; static files are the only mechanism. `src/lib/llm.ts` therefore runs before
+  module resolution is set up and must stay self-contained (relative imports +
+  `fs` only).
 - Remote-visible Git metadata (commits, PRs) must be English and must not mention
   AI agents/assistants.
 - **Timeline primitives — right-edge overflow.** The time-scaled content box is
