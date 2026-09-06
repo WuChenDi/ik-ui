@@ -19,7 +19,7 @@ Live site / registry: https://ik-ui.pages.dev
 - **MDX** docs via `@next/mdx` (`remark-code-import`, `remark-gfm`,
   `rehype-slug`, `rehype-autolink-headings`, Shiki highlighting)
 - **Biome** for lint + format (replaces ESLint/Prettier)
-- **TypeScript 7** (strict), **pnpm 11**, **Node >= 22**
+- **TypeScript 7** (strict), **pnpm 12**, **Node >= 22**
 - Animations: `motion`; icons: `lucide-react`
 
 ## Commands

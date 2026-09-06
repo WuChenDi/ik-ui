@@ -106,7 +106,7 @@ Browse the full catalog with live previews at
 - **Tailwind CSS v4** (CSS-first, no config file)
 - **Base UI** (`@base-ui/react`) as the only UI primitive layer
 - **MDX** docs with Shiki highlighting
-- **Biome** for lint + format, **TypeScript 7** (strict), **pnpm 11**, **Node ≥ 22**
+- **Biome** for lint + format, **TypeScript 7** (strict), **pnpm 12**, **Node ≥ 22**
 
 ## Documentation
 
