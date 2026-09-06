@@ -84,7 +84,6 @@ export function Demo() {
         enableDragAndDrop
         onDragEnd={onDragEnd}
         getRowId={(row) => row.id}
-        showPagination={false}
       />
     </div>
   )

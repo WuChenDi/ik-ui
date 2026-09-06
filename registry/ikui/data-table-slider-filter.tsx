@@ -54,6 +54,10 @@ export function DataTableSliderFilter<TData extends RowData>({
   const defaultRange = column.columnDef.meta?.range
   const unit = column.columnDef.meta?.unit
 
+  // Read the facets outside the memo: they change with the other columns'
+  // filters, so they have to be a dependency rather than a value captured once.
+  const facetedMinMaxValues = column.getFacetedMinMaxValues()
+
   const { min, max, step } = React.useMemo<Range & { step: number }>(() => {
     let minValue = 0
     let maxValue = 100
@@ -61,7 +65,7 @@ export function DataTableSliderFilter<TData extends RowData>({
     if (defaultRange && getIsValidRange(defaultRange)) {
       ;[minValue, maxValue] = defaultRange
     } else {
-      const values = column.getFacetedMinMaxValues()
+      const values = facetedMinMaxValues
       if (values && Array.isArray(values) && values.length === 2) {
         const [facetMinValue, facetMaxValue] = values
         if (
@@ -83,7 +87,7 @@ export function DataTableSliderFilter<TData extends RowData>({
           : Math.ceil(rangeSize / 50)
 
     return { min: minValue, max: maxValue, step }
-  }, [column, defaultRange])
+  }, [defaultRange, facetedMinMaxValues])
 
   const range = React.useMemo((): RangeValue => {
     return columnFilterValue ?? [min, max]

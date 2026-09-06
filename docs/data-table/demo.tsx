@@ -148,7 +148,7 @@ const columns: ColumnDef<DataTableFeatures, Task>[] = [
       ],
     },
     enableColumnFilter: true,
-    filterFn: 'arrIncludesSome',
+    filterFn: 'arrHas',
   },
   {
     accessorKey: 'priority',
@@ -168,7 +168,7 @@ const columns: ColumnDef<DataTableFeatures, Task>[] = [
       ],
     },
     enableColumnFilter: true,
-    filterFn: 'arrIncludesSome',
+    filterFn: 'arrHas',
   },
   {
     accessorKey: 'estimatedHours',
@@ -228,14 +228,18 @@ const columns: ColumnDef<DataTableFeatures, Task>[] = [
   },
 ]
 
+// `tableFeatures()` is meant to be called statically: a new features object on
+// every render hands `useTable` a fresh set of row-model factories.
+const features = tableFeatures({
+  ...dataTableFeatures,
+  paginatedRowModel: createPaginatedRowModel(),
+})
+
 export function Demo() {
   const table = useTable({
     data,
     columns,
-    features: tableFeatures({
-      ...dataTableFeatures,
-      paginatedRowModel: createPaginatedRowModel(),
-    }),
+    features,
     initialState: { pagination: { pageIndex: 0, pageSize: 5 } },
   })
 

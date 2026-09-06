@@ -13,7 +13,7 @@ import {
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import type { ReactTable, RowData } from '@tanstack/react-table'
-import { flexRender } from '@tanstack/react-table'
+import { FlexRender } from '@tanstack/react-table'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import * as React from 'react'
 import { DataTableDraggableRow } from '@/components/data-table-draggable-row'
@@ -39,6 +39,12 @@ interface DataTableProps<TData extends RowData>
   enableVirtualization?: boolean
   estimateRowSize?: number
   pageSizeOptions?: number[]
+  /**
+   * Show the pagination footer. Defaults to whether the table registered a
+   * `paginatedRowModel`: `rowPaginationFeature` alone gives the table pagination
+   * state and page-count APIs but no row slicing, so a footer rendered without
+   * the row model would page a table that never changes rows.
+   */
   showPagination?: boolean
   totalCount?: number
   enableDragAndDrop?: boolean
@@ -55,7 +61,7 @@ export function DataTable<TData extends RowData>({
   enableVirtualization = true,
   estimateRowSize = 80,
   pageSizeOptions,
-  showPagination = true,
+  showPagination = 'paginatedRowModel' in table.options.features,
   totalCount,
   enableDragAndDrop = false,
   onDragEnd,
@@ -111,7 +117,7 @@ export function DataTable<TData extends RowData>({
       return (
         <TableRow>
           <TableCell
-            colSpan={table.getAllColumns().length}
+            colSpan={table.getVisibleLeafColumns().length}
             className="h-24 text-center"
           >
             {emptyState ?? (
@@ -167,10 +173,7 @@ export function DataTable<TData extends RowData>({
                       }}
                       className={cn(isPinned && 'z-10 bg-background')}
                     >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
+                      <FlexRender cell={cell} />
                     </TableCell>
                   )
                 })}
@@ -217,7 +220,7 @@ export function DataTable<TData extends RowData>({
                 }}
                 className={cn(isPinned && 'z-10 bg-background')}
               >
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                <FlexRender cell={cell} />
               </TableCell>
             )
           })}
@@ -262,12 +265,9 @@ export function DataTable<TData extends RowData>({
                       }}
                       className={cn('bg-muted', isPinned && 'z-40 bg-muted')}
                     >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                      {header.isPlaceholder ? null : (
+                        <FlexRender header={header} />
+                      )}
                     </TableHead>
                   )
                 })}
@@ -289,13 +289,15 @@ export function DataTable<TData extends RowData>({
           {footer && rows.length > 0 && <TableFooter>{footer}</TableFooter>}
         </table>
       </div>
-      {showPagination && (
+      {(showPagination || actionBar) && (
         <div className="flex flex-col gap-2.5">
-          <DataTablePagination
-            table={table}
-            totalCount={totalCount}
-            pageSizeOptions={pageSizeOptions}
-          />
+          {showPagination && (
+            <DataTablePagination
+              table={table}
+              totalCount={totalCount}
+              pageSizeOptions={pageSizeOptions}
+            />
+          )}
           {actionBar &&
             table.getFilteredSelectedRowModel().rows.length > 0 &&
             actionBar}

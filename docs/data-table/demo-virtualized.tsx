@@ -100,7 +100,7 @@ export function Demo() {
     // A bounded height turns the table container into the scroll element the
     // virtualizer measures against. Without it there is nothing to virtualize.
     <div className="flex h-[520px] w-full flex-col">
-      <DataTable table={table} showPagination={false} estimateRowSize={44} />
+      <DataTable table={table} estimateRowSize={44} />
     </div>
   )
 }
