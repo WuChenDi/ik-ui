@@ -72,19 +72,19 @@ const columns = [
       ],
     },
     enableColumnFilter: true,
-    filterFn: "arrIncludesSome",
+    filterFn: "arrHas",
   },
 ];
 
+// Call `tableFeatures()` at module scope — a new features object on every
+// render hands `useTable` a fresh set of row-model factories.
+const features = tableFeatures({
+  ...dataTableFeatures,
+  paginatedRowModel: createPaginatedRowModel(),
+});
+
 function Example() {
-  const table = useTable({
-    data,
-    columns,
-    features: tableFeatures({
-      ...dataTableFeatures,
-      paginatedRowModel: createPaginatedRowModel(),
-    }),
-  });
+  const table = useTable({ data, columns, features });
 
   return (
     <DataTable table={table}>
@@ -99,10 +99,11 @@ function Example() {
 ### Large datasets (virtualized)
 
 Row virtualization only kicks in when the **final row model** holds more than 20
-rows, so it and pagination are mutually exclusive: omit `paginatedRowModel`
-(or set `showPagination={false}`) to let the full dataset reach the table, and
-give the container a **bounded height** so it becomes the scroll element the
-virtualizer measures against. The example below renders 5,000 rows while only
+rows, so it and pagination are mutually exclusive: omit `paginatedRowModel` to
+let the full dataset reach the table — `showPagination` defaults to whether that
+row model is registered, so the footer disappears with it — and give the
+container a **bounded height** so it becomes the scroll element the virtualizer
+measures against. The example below renders 5,000 rows while only
 mounting the handful in view.
 
 Virtualization trims the **DOM**, not memory or compute — sorting and filtering
@@ -262,8 +263,8 @@ by `data-table-utils.ts` via module augmentation):
     {
       name: "showPagination",
       type: "boolean",
-      default: "true",
-      typeDetails: "Show the pagination footer"
+      default: "registered `paginatedRowModel`",
+      typeDetails: "Show the pagination footer. Defaults on only when the table registered a `paginatedRowModel`, since `rowPaginationFeature` alone paginates state without slicing rows"
     },
     {
       name: "totalCount",

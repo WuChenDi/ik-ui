@@ -1,7 +1,7 @@
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import type { Row, RowData } from '@tanstack/react-table'
-import { flexRender } from '@tanstack/react-table'
+import { FlexRender } from '@tanstack/react-table'
 import type { VirtualItem, Virtualizer } from '@tanstack/react-virtual'
 import { TableCell, TableRow } from '@/components/ui/table'
 import type { DataTableFeatures } from '@/lib/data-table-utils'
@@ -77,7 +77,7 @@ export function DataTableDraggableRow<TData extends RowData>({
             ref={isDragColumn ? setActivatorNodeRef : undefined}
             {...(isDragColumn ? { ...listeners, ...attributes } : {})}
           >
-            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+            <FlexRender cell={cell} />
           </TableCell>
         )
       })}

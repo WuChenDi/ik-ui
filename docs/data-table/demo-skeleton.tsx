@@ -35,16 +35,20 @@ const columns: ColumnDef<DataTableFeatures, Invoice>[] = [
   { accessorKey: 'status', header: 'Status' },
 ]
 
+// `tableFeatures()` is meant to be called statically: a new features object on
+// every render hands `useTable` a fresh set of row-model factories.
+const features = tableFeatures({
+  ...dataTableFeatures,
+  paginatedRowModel: createPaginatedRowModel(),
+})
+
 export function Demo() {
   const [isLoading, setIsLoading] = React.useState(true)
 
   const table = useTable({
     data,
     columns,
-    features: tableFeatures({
-      ...dataTableFeatures,
-      paginatedRowModel: createPaginatedRowModel(),
-    }),
+    features,
   })
 
   return (

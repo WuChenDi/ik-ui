@@ -16,7 +16,7 @@ import {
   createFacetedUniqueValues,
   createFilteredRowModel,
   createSortedRowModel,
-  filterFn_arrIncludesSome,
+  filterFn_arrHas,
   filterFn_includesString,
   rowPaginationFeature,
   rowSelectionFeature,
@@ -35,9 +35,11 @@ import {
  * faceting) all depend on this baseline being present.
  *
  * Row-model factories are memoized per table, so sharing these instances across
- * tables is safe. Pagination is intentionally left out — it slices the row model
- * and would break non-paginated tables (e.g. the virtualized demo). Tables that
- * want pagination add `paginatedRowModel: createPaginatedRowModel()` on top.
+ * tables is safe. `paginatedRowModel` is intentionally left out — it slices the
+ * row model and would break non-paginated tables (e.g. the virtualized demo).
+ * Tables that want pagination add `paginatedRowModel: createPaginatedRowModel()`
+ * on top; `DataTable` keys its pagination footer off that registration, so a
+ * table that skips it simply renders no footer.
  */
 export const dataTableFeatures = tableFeatures({
   columnFacetingFeature,
@@ -61,7 +63,11 @@ export const dataTableFeatures = tableFeatures({
   // string/date fns need registering here.
   filterFns: {
     includesString: filterFn_includesString,
-    arrIncludesSome: filterFn_arrIncludesSome,
+    // `arrHas` is the select/multiSelect filter: a scalar cell value matched
+    // against the array of selected options. `arrIncludesSome` is its mirror —
+    // it requires the *cell* to be the array — and silently drops every row
+    // when pointed at a scalar column.
+    arrHas: filterFn_arrHas,
   },
   sortFns: {
     alphanumeric: sortFn_alphanumeric,
@@ -119,7 +125,7 @@ declare module '@tanstack/react-table' {
 
 /**
  * Sticky-column styles for a pinned TanStack Table column. Returns the inline
- * styles that keep a left/right pinned column fixed while the rest scrolls,
+ * styles that keep a start/end pinned column fixed while the rest scrolls,
  * with an optional inset shadow on the last pinned column of each side.
  */
 export function getCommonPinningStyles<TData extends RowData>({
@@ -133,27 +139,32 @@ export function getCommonPinningStyles<TData extends RowData>({
   /** Header cells keep their own background, so skip the card fill. */
   isHeader?: boolean
 }): React.CSSProperties {
-  // TanStack Table v9 renamed the pinning positions from `left`/`right` to
-  // `start`/`end`, and dropped `column.getIsLastColumn`/`getIsFirstColumn` — the
-  // outermost pinned column is now derived from the pinned visible leaf columns.
+  // TanStack Table v9 renamed the pinning positions from the physical
+  // `left`/`right` to the logical `start`/`end`. `column.getIsLastColumn` /
+  // `getIsFirstColumn` moved to `columnOrderingFeature`, which this feature set
+  // does not register, so the outermost pinned column of each side is derived
+  // from the pinned visible leaf columns instead.
   const isPinned = column.getIsPinned()
-  const isLastLeftPinnedColumn =
+  const isLastStartPinnedColumn =
     isPinned === 'start' &&
     column.table.getStartVisibleLeafColumns().at(-1)?.id === column.id
-  const isFirstRightPinnedColumn =
+  const isFirstEndPinnedColumn =
     isPinned === 'end' &&
     column.table.getEndVisibleLeafColumns()[0]?.id === column.id
 
   return {
     boxShadow: withBorder
-      ? isLastLeftPinnedColumn
+      ? isLastStartPinnedColumn
         ? '-4px 0 4px -4px var(--border) inset'
-        : isFirstRightPinnedColumn
+        : isFirstEndPinnedColumn
           ? '4px 0 4px -4px var(--border) inset'
           : undefined
       : undefined,
-    left: isPinned === 'start' ? `${column.getStart('start')}px` : undefined,
-    right: isPinned === 'end' ? `${column.getAfter('end')}px` : undefined,
+    // Logical inset properties, so `start`/`end` follow the writing direction.
+    insetInlineStart:
+      isPinned === 'start' ? `${column.getStart('start')}px` : undefined,
+    insetInlineEnd:
+      isPinned === 'end' ? `${column.getAfter('end')}px` : undefined,
     opacity: 1,
     position: isPinned ? 'sticky' : 'relative',
     background: isPinned && !isHeader ? 'var(--card)' : '',

@@ -39,6 +39,10 @@ export function DataTableFacetedFilter<TData extends RowData, TValue>({
   const [open, setOpen] = React.useState(false)
 
   const columnFilterValue = column?.getFilterValue()
+  // Faceted counts come from the column's faceted row model, which applies every
+  // *other* column's filters — so the numbers reflect what selecting an option
+  // would actually yield. An explicit `option.count` still wins.
+  const facetedUniqueValues = column?.getFacetedUniqueValues()
   const selectedValues = React.useMemo(
     () => new Set(Array.isArray(columnFilterValue) ? columnFilterValue : []),
     [columnFilterValue],
@@ -136,6 +140,8 @@ export function DataTableFacetedFilter<TData extends RowData, TValue>({
             <CommandGroup className="max-h-[18.75rem] overflow-x-hidden overflow-y-auto">
               {options.map((option) => {
                 const isSelected = selectedValues.has(option.value)
+                const count =
+                  option.count ?? facetedUniqueValues?.get(option.value)
 
                 return (
                   <CommandItem
@@ -154,10 +160,8 @@ export function DataTableFacetedFilter<TData extends RowData, TValue>({
                     </div>
                     {option.icon && <option.icon />}
                     <span className="truncate">{option.label}</span>
-                    {option.count && (
-                      <span className="ml-auto font-mono text-xs">
-                        {option.count}
-                      </span>
+                    {count !== undefined && (
+                      <span className="ml-auto font-mono text-xs">{count}</span>
                     )}
                   </CommandItem>
                 )

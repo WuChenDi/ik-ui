@@ -105,11 +105,7 @@ export function Demo() {
     <div className="w-full">
       {/* The table is wider than the viewport, so the pinned `id` (left) and
           `actions` (right) columns stay put while the rest scrolls sideways. */}
-      <DataTable
-        table={table}
-        showPagination={false}
-        className="min-w-[1100px]"
-      />
+      <DataTable table={table} className="min-w-[1100px]" />
     </div>
   )
 }
